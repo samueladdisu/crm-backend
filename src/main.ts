@@ -9,6 +9,9 @@ async function bootstrap() {
     origin: 'http://192.168.1.49:5173',
     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
     credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   });
   app.use(cookieParser());
   app.useGlobalPipes(

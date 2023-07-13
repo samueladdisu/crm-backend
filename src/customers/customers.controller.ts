@@ -54,7 +54,6 @@ export class CustomersController {
     @Res() res: Response,
     @Req() req: Request,
   ) {
-    console.log('jwt', req.cookies['jwt']);
     const page = parseInt(query.page, 10) || 1;
     const limit = parseInt(query.limit, 10) || 10;
     return this.handleRequest(this.customersService.findAll(page, limit), res);

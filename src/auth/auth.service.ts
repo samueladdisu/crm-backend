@@ -5,6 +5,7 @@ import { Response } from 'express';
 import { UserService } from './user.service';
 import { ObjectId } from 'mongoose';
 import { SignupDto } from './dto/signup.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Injectable()
 export class AuthService {
@@ -36,6 +37,10 @@ export class AuthService {
     } catch (error) {
       return null;
     }
+  }
+
+  async updateProfile(updateProfileDto: UpdateProfileDto, jwt: string) {
+    return null;
   }
 
   async findUser(email: string) {

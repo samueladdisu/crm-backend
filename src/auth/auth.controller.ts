@@ -2,14 +2,18 @@ import {
   Body,
   Controller,
   Post,
+  Put,
   Req,
   Res,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { SignupDto } from './dto/signup.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
+import { JwtAuthGuard } from './guards/jwt.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -56,6 +60,37 @@ export class AuthController {
       this.authService.generateToken(res, user._id);
 
       res.status(201).json({
+        success: true,
+        _id: user._id,
+        name: user.firstName,
+        email: user.email,
+        role: user.role,
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  }
+
+  @Put('profile')
+  @UseGuards(JwtAuthGuard)
+  async profile(
+    @Body() updateProfileDto: UpdateProfileDto,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    try {
+      const jwt = req.cookies['jwt'];
+
+      const user = await this.authService.updateProfile(updateProfileDto, jwt);
+
+      if (user instanceof Error) {
+        throw new UnauthorizedException(user.message);
+      }
+
+      res.status(200).json({
         success: true,
         _id: user._id,
         name: user.firstName,
